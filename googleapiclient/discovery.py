@@ -875,60 +875,60 @@ def createMethod(methodName, methodDesc, rootDesc, schema):
                                 methodId=methodId,
                                 resumable=resumable)
 
-  docs = [methodDesc.get('description', DEFAULT_METHOD_DOC), '\n\n']
-  if len(parameters.argmap) > 0:
-    docs.append('Args:\n')
-
-  # Skip undocumented params and params common to all methods.
-  skip_parameters = list(rootDesc.get('parameters', {}).keys())
-  skip_parameters.extend(STACK_QUERY_PARAMETERS)
-
-  all_args = list(parameters.argmap.keys())
-  args_ordered = [key2param(s) for s in methodDesc.get('parameterOrder', [])]
-
-  # Move body to the front of the line.
-  if 'body' in all_args:
-    args_ordered.append('body')
-
-  for name in all_args:
-    if name not in args_ordered:
-      args_ordered.append(name)
-
-  for arg in args_ordered:
-    if arg in skip_parameters:
-      continue
-
-    repeated = ''
-    if arg in parameters.repeated_params:
-      repeated = ' (repeated)'
-    required = ''
-    if arg in parameters.required_params:
-      required = ' (required)'
-    paramdesc = methodDesc['parameters'][parameters.argmap[arg]]
-    paramdoc = paramdesc.get('description', 'A parameter')
-    if '$ref' in paramdesc:
-      docs.append(
-          ('  %s: object, %s%s%s\n    The object takes the'
-          ' form of:\n\n%s\n\n') % (arg, paramdoc, required, repeated,
-            schema.prettyPrintByName(paramdesc['$ref'])))
-    else:
-      paramtype = paramdesc.get('type', 'string')
-      docs.append('  %s: %s, %s%s%s\n' % (arg, paramtype, paramdoc, required,
-                                          repeated))
-    enum = paramdesc.get('enum', [])
-    enumDesc = paramdesc.get('enumDescriptions', [])
-    if enum and enumDesc:
-      docs.append('    Allowed values\n')
-      for (name, desc) in zip(enum, enumDesc):
-        docs.append('      %s - %s\n' % (name, desc))
-  if 'response' in methodDesc:
-    if methodName.endswith('_media'):
-      docs.append('\nReturns:\n  The media object as a string.\n\n    ')
-    else:
-      docs.append('\nReturns:\n  An object of the form:\n\n    ')
-      docs.append(schema.prettyPrintSchema(methodDesc['response']))
-
-  setattr(method, '__doc__', ''.join(docs))
+#  docs = [methodDesc.get('description', DEFAULT_METHOD_DOC), '\n\n']
+#  if len(parameters.argmap) > 0:
+#    docs.append('Args:\n')
+#
+#  # Skip undocumented params and params common to all methods.
+#  skip_parameters = list(rootDesc.get('parameters', {}).keys())
+#  skip_parameters.extend(STACK_QUERY_PARAMETERS)
+#
+#  all_args = list(parameters.argmap.keys())
+#  args_ordered = [key2param(s) for s in methodDesc.get('parameterOrder', [])]
+#
+#  # Move body to the front of the line.
+#  if 'body' in all_args:
+#    args_ordered.append('body')
+#
+#  for name in all_args:
+#    if name not in args_ordered:
+#      args_ordered.append(name)
+#
+#  for arg in args_ordered:
+#    if arg in skip_parameters:
+#      continue
+#
+#    repeated = ''
+#    if arg in parameters.repeated_params:
+#      repeated = ' (repeated)'
+#    required = ''
+#    if arg in parameters.required_params:
+#      required = ' (required)'
+#    paramdesc = methodDesc['parameters'][parameters.argmap[arg]]
+#    paramdoc = paramdesc.get('description', 'A parameter')
+#    if '$ref' in paramdesc:
+#      docs.append(
+#          ('  %s: object, %s%s%s\n    The object takes the'
+#          ' form of:\n\n%s\n\n') % (arg, paramdoc, required, repeated,
+#            schema.prettyPrintByName(paramdesc['$ref'])))
+#    else:
+#      paramtype = paramdesc.get('type', 'string')
+#      docs.append('  %s: %s, %s%s%s\n' % (arg, paramtype, paramdoc, required,
+#                                          repeated))
+#    enum = paramdesc.get('enum', [])
+#    enumDesc = paramdesc.get('enumDescriptions', [])
+#    if enum and enumDesc:
+#      docs.append('    Allowed values\n')
+#      for (name, desc) in zip(enum, enumDesc):
+#        docs.append('      %s - %s\n' % (name, desc))
+#  if 'response' in methodDesc:
+#    if methodName.endswith('_media'):
+#      docs.append('\nReturns:\n  The media object as a string.\n\n    ')
+#    else:
+#      docs.append('\nReturns:\n  An object of the form:\n\n    ')
+#      docs.append(schema.prettyPrintSchema(methodDesc['response']))
+#
+#  setattr(method, '__doc__', ''.join(docs))
   return (methodName, method)
 
 
